@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">La Casona Del Café</string>
+    <string name="action_settings">Opciones</string>
+    <string name="restaurant_tab">Restaurante</string>
+    <string name="billing_tab">Cuentas</string>
+    <string name="table">Mesa</string>
+    <string name="status">Estado</string>
+    <string name="title_menu_list">Ordenes</string>
+    <string name="title_menu_detail">Detalle del menú</string>
+    <string name="make_order">Ordenar</string>
+    <string name="delete_text">Eliminar</string>
+</resources>

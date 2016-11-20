@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">La Casona Del Café</string>
+    <string name="action_settings">Settings</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+    <string name="restaurant_tab">Restaurant</string>
+    <string name="billing_tab">Billing</string>
+    <string name="table">Table</string>
+    <string name="status">Status</string>
+    <string name="title_menu_list">Orders</string>
+    <string name="title_menu_detail">Menu Detail</string>
+    <string name="plate_price">$%1$d</string>
+    <string name="make_order">Order</string>
+    <string name="delete_text">Delete</string>
+    <string name="total_text">Total</string>
+</resources>
