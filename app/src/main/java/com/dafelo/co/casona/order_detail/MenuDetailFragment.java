@@ -1,6 +1,7 @@
 package com.dafelo.co.casona.order_detail;
 
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -16,6 +17,7 @@ import com.dafelo.co.casona.BO.OrderItem;
 import com.dafelo.co.casona.R;
 import com.dafelo.co.casona.adapters.DinningOrderAdapter;
 import com.dafelo.co.casona.adapters.PlateListAdapter;
+import com.dafelo.co.casona.listeners.OnItemAddedListener;
 import com.dafelo.co.casona.listeners.OnNumberPickListener;
 
 import java.util.ArrayList;
@@ -42,6 +44,7 @@ public class MenuDetailFragment extends Fragment {
     /** Hold active loading observable subscriptions, so that they can be unsubscribed from when the activity is destroyed */
     private CompositeSubscription subscriptions;
     private Unbinder unbinder;
+    private OnItemAddedListener mCallback;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -66,31 +69,52 @@ public class MenuDetailFragment extends Fragment {
         // use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView
         mRecycleView.setHasFixedSize(true);
+        mRecycleView.setNestedScrollingEnabled(false);
         // use a linear layout manager
         mRecycleView.setLayoutManager(new LinearLayoutManager(getActivity()));
         // specify an adapter (see also next example)
-         mAdapter = new DinningOrderAdapter(getActivity());
-        mAdapter.setmNuberPickListener((newVal, oldVal, order) -> {
-            subscriptions.add(
-                    menuDetailViewModel.itemQuantityChanged(order, newVal, oldVal).subscribe()
-            );
-        });
+        mAdapter = new DinningOrderAdapter(getActivity());
+        mAdapter.setOnItemrRemovedListener(menuDetailViewModel::removeOrder);
+
+        mAdapter.setmNuberPickListener((newVal, oldVal, order) ->
+                menuDetailViewModel.itemQuantityChanged(order, newVal, oldVal)
+        );
         mRecycleView.setAdapter(mAdapter);
 
         // Bind list of posts to the RecyclerView
-        menuDetailViewModel.ordersObservable().observeOn(AndroidSchedulers.mainThread())
-                .subscribe(order -> {
-                    mAdapter.setItems(order.getOrders());
-                    billTotal.setText
-                            (String.format(getContext().getString(R.string.plate_price),
-                                    order.getTotal()));
-                });
+        try {
+            menuDetailViewModel.ordersObservable().observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(order -> {
+                        mAdapter.setItems(order.getOrders());
+                        billTotal.setText
+                                (String.format(getContext().getString(R.string.plate_price),
+                                        order.getTotal()));
+                    }, Throwable::printStackTrace);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         return rootView;
     }
 
     public void addFoodToOrder(FoodPlate foodPlate) {
         menuDetailViewModel.addOrder(foodPlate);
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        if(context instanceof OnItemAddedListener) {
+            try {
+                mCallback = (OnItemAddedListener) context;
+            } catch (ClassCastException e) {
+                throw new ClassCastException(context.toString()
+                        + " must implement OnItemAddedListener");
+            }
+        }
+        // This makes sure that the container activity has implemented
+        // the callback interface. If not, it throws an exception
     }
 
     @Override

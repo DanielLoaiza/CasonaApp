@@ -25,6 +25,34 @@ public class MenuDetailViewModel {
 
 
     void addOrder(FoodPlate plate) {
+        if(order.getOrders().size() > 0) {
+            Observable.from(order.getOrders())
+                    .subscribeOn(Schedulers.computation())
+                    .filter(orderItem1 -> orderItem1.getPlate().equals(plate))
+                    .map(order.getOrders()::indexOf)
+                    .doOnError(throwable -> {
+                        Log.e("error", throwable.getStackTrace().toString());
+                    })
+                    .toList()
+                    .subscribe(list -> {
+                        if(list.size() > 0) {
+                            OrderItem orderItem = order.getOrders().get(list.get(0));
+                            order.setTotal(order.getTotal() + plate.getPrice());
+                            orderItem.setQuantity(orderItem.getQuantity() + 1);
+                            orderSubject.onNext(order);
+                        } else {
+                            createNewOrderAndNotify(plate);
+                        }
+                    }, throwable -> {
+                        Log.e("error", throwable.getStackTrace().toString());
+                    });
+        } else {
+           createNewOrderAndNotify(plate);
+        }
+    }
+
+    void createNewOrderAndNotify(FoodPlate plate) {
+        // item already in list
         OrderItem orderItem = new OrderItem(plate);
         order.getOrders().add(orderItem);
         int total = order.getTotal() + orderItem.getPlate().getPrice();
@@ -32,14 +60,34 @@ public class MenuDetailViewModel {
         orderSubject.onNext(order);
     }
 
-    Observable<Integer> itemQuantityChanged(OrderItem orderItem, int currentQuantity, int previousQuantity) {
+    void removeOrder(FoodPlate plate) {
+        try {
+            Observable.from(order.getOrders())
+                    .filter(orderItem -> orderItem.getPlate().equals(plate))
+                    .map(order.getOrders()::indexOf)
+                    .subscribe(index -> {
+                        OrderItem orderItem1 = order.getOrders().get(index);
+                        int totalDiff = order.getTotal() - orderItem1.getTotal();
+                        order.setTotal(totalDiff);
+                        order.getOrders().remove(orderItem1);
+                        orderSubject.onNext(order);
+                    }, throwable -> {
+                        Log.e("error", throwable.getMessage());
+                    });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-        return Observable.
+    }
+
+    void itemQuantityChanged(OrderItem orderItem, int currentQuantity, int previousQuantity) {
+
+         Observable.
                 from(order.getOrders())
-                .observeOn(Schedulers.computation())
+                .subscribeOn(Schedulers.computation())
                 .filter(orderItemValue -> orderItemValue.equals(orderItem))
                 .map(order.getOrders()::indexOf)
-                .doOnNext(index -> {
+                .subscribe(index -> {
                     OrderItem orderItem1 = order.getOrders().get(index);
                     int platePrice = orderItem1.getPlate().getPrice();
                     int previousTotalFromItem = platePrice * previousQuantity;
@@ -48,6 +96,8 @@ public class MenuDetailViewModel {
                     order.setTotal(order.getTotal() + totalDiff);
                     order.getOrders().get(index).setQuantity(currentQuantity);
                     orderSubject.onNext(order);
+                }, throwable -> {
+                    Log.e("error", throwable.getStackTrace().toString());
                 });
     }
 

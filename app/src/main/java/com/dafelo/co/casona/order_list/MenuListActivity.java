@@ -33,6 +33,7 @@ public class MenuListActivity extends AppCompatActivity implements OnItemAddedLi
     @Nullable @BindView(R.id.menu_detail_container)
     FrameLayout detailFragmentContainer;
     @Nullable MenuDetailFragment menuDetailFragment;
+    @Nullable MenuListFragment menuListFragment;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,9 +49,9 @@ public class MenuListActivity extends AppCompatActivity implements OnItemAddedLi
         if(savedInstanceState == null) {
             //Your RecyclerView
             if (menuFragmentContainer != null) {
-                MenuListFragment fragment = new MenuListFragment();
+                menuListFragment = new MenuListFragment();
                 getSupportFragmentManager().beginTransaction()
-                        .add(R.id.menu_item_list_container, fragment)
+                        .add(R.id.menu_item_list_container, menuListFragment)
                         .commit();
             }
 

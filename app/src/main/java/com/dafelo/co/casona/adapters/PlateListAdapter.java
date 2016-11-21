@@ -2,6 +2,7 @@ package com.dafelo.co.casona.adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +27,14 @@ public class PlateListAdapter extends RecyclerView.Adapter<PlateListAdapter.View
         position = position == -1 ? getItemCount()  : position;
         mData.add(position,s);
         notifyItemInserted(position);
+    }
+
+    public void itemChanged(FoodPlate s) {
+        int position = mData.indexOf(s);
+        Log.e("indexOf", String.valueOf(position));
+        if(position > -1) {
+            notifyItemChanged(position);
+        }
     }
 
     public void remove(int position){
@@ -54,7 +63,9 @@ public class PlateListAdapter extends RecyclerView.Adapter<PlateListAdapter.View
         holder.name.setText(mData.get(position).getName());
         String price = String.format(mContext.getString(R.string.plate_price), mData.get(position).getPrice());
         holder.price.setText(price);
-        holder.addButton.setOnClickListener(view -> onItemAddedListener.onItemAdd(mData.get(position)));
+        holder.addButton.setOnClickListener(view -> {
+            onItemAddedListener.onItemAdd(mData.get(position));
+        });
     }
 
     @Override

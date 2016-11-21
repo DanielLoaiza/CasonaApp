@@ -5,12 +5,15 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.NumberPicker;
 import android.widget.TextView;
 
 import com.dafelo.co.casona.BO.FoodPlate;
 import com.dafelo.co.casona.BO.OrderItem;
 import com.dafelo.co.casona.R;
+import com.dafelo.co.casona.listeners.OnItemAddedListener;
+import com.dafelo.co.casona.listeners.OnItemRemovedListener;
 import com.dafelo.co.casona.listeners.OnNumberPickListener;
 
 import java.util.ArrayList;
@@ -27,6 +30,7 @@ public class DinningOrderAdapter extends RecyclerView.Adapter<DinningOrderAdapte
 
     private List<OrderItem> order;
     private OnNumberPickListener mNumberPickListener;
+    private OnItemRemovedListener onItemRemovedListener;
     private Context mContext;
 
     public DinningOrderAdapter(Context context) {
@@ -52,6 +56,10 @@ public class DinningOrderAdapter extends RecyclerView.Adapter<DinningOrderAdapte
         notifyItemInserted(order.size() -1);
     }
 
+    public void setOnItemrRemovedListener(OnItemRemovedListener onItemRemovedListener) {
+        this.onItemRemovedListener = onItemRemovedListener;
+    }
+
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         // create a new view
@@ -73,6 +81,8 @@ public class DinningOrderAdapter extends RecyclerView.Adapter<DinningOrderAdapte
                         mContext.getString(R.string.plate_price),
                         order.get(position).getTotal())
         );
+        holder.deleteButton.setOnClickListener(view ->
+                onItemRemovedListener.onItemRemove(order.get(position).getPlate()));
     }
 
     @Override
@@ -90,6 +100,7 @@ public class DinningOrderAdapter extends RecyclerView.Adapter<DinningOrderAdapte
         @BindView(R.id.order_item_name) TextView itemName;
         @BindView(R.id.order_item_quantity) NumberPicker itemQuantity;
         @BindView(R.id.order_item_total) TextView itemTotal;
+        @BindView(R.id.item_order_cancel) Button deleteButton;
 
         ViewHolder(View itemView) {
             super(itemView);

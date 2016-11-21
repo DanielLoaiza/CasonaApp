@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,6 +34,7 @@ public class MenuListFragment extends Fragment {
     @BindView(R.id.menu_list) RecyclerView mRecyclerView;
     private Unbinder unbinder;
     private OnItemAddedListener mCallback;
+    private PlateListAdapter mAdapter;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -64,7 +66,7 @@ public class MenuListFragment extends Fragment {
         food.add(new FoodPlate("Filete de pollo", 17000));
         food.add(new FoodPlate("Trucha al ajillo", 15000));
         //Your RecyclerView.Adapter
-        PlateListAdapter mAdapter = new PlateListAdapter(getActivity(), food);
+        mAdapter = new PlateListAdapter(getActivity(), food);
         mAdapter.setOnItemAddedListener(this::sendItemToActivity);
 
         //This is the code to provide a sectioned list
