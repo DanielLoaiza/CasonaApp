@@ -12,6 +12,7 @@ import android.widget.FrameLayout;
 import com.dafelo.co.casona.BO.FoodPlate;
 import com.dafelo.co.casona.R;
 import com.dafelo.co.casona.listeners.OnItemAddedListener;
+import com.dafelo.co.casona.main.BaseActivity;
 import com.dafelo.co.casona.order_detail.MenuDetailFragment;
 import com.dafelo.co.casona.order_detail.MenuListFragment;
 
@@ -25,7 +26,7 @@ import butterknife.ButterKnife;
  * item details. On tablets, the activity presents the list of items and
  * item details side-by-side using two vertical panes.
  */
-public class MenuListActivity extends AppCompatActivity implements OnItemAddedListener {
+public class MenuListActivity extends BaseActivity implements OnItemAddedListener {
 
     @BindView(R.id.toolbar) Toolbar toolbar;
     @Nullable @BindView(R.id.menu_item_list_container)
@@ -50,16 +51,12 @@ public class MenuListActivity extends AppCompatActivity implements OnItemAddedLi
             //Your RecyclerView
             if (menuFragmentContainer != null) {
                 menuListFragment = new MenuListFragment();
-                getSupportFragmentManager().beginTransaction()
-                        .add(R.id.menu_item_list_container, menuListFragment)
-                        .commit();
+                addFragment(R.id.menu_item_list_container, menuListFragment);
             }
 
             if (detailFragmentContainer != null) {
-                 menuDetailFragment = new MenuDetailFragment();
-                getSupportFragmentManager().beginTransaction()
-                        .add(R.id.menu_detail_container, menuDetailFragment)
-                        .commit();
+                menuDetailFragment = new MenuDetailFragment();
+                addFragment(R.id.menu_detail_container, menuDetailFragment);
             }
         }
     }
