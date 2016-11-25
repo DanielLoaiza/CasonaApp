@@ -15,9 +15,15 @@ import com.dafelo.co.casona.adapters.PlateListAdapter;
 import com.dafelo.co.casona.adapters.SimpleSectionedRecyclerViewAdapter;
 import com.dafelo.co.casona.helpers.DividerItemDecoration;
 import com.dafelo.co.casona.listeners.OnItemAddedListener;
+import com.dafelo.co.casona.order_detail.di.DaggerMenuComponent;
+import com.dafelo.co.casona.order_detail.di.MenuComponent;
+import com.dafelo.co.casona.order_detail.di.MenuModule;
+import com.dafelo.co.casona.order_detail.interfaces.MenuListContract;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -27,12 +33,15 @@ import butterknife.Unbinder;
  * Created by root on 19/11/16.
  */
 
-public class MenuListFragment extends Fragment {
+public class MenuListFragment extends Fragment implements MenuListContract.View {
 
     @BindView(R.id.menu_list) RecyclerView mRecyclerView;
     private Unbinder unbinder;
     private OnItemAddedListener mCallback;
     private PlateListAdapter mAdapter;
+    @Inject
+    MenuListContract.Presenter mPresenter;
+    private MenuComponent menuComponent;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -44,6 +53,9 @@ public class MenuListFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.initializeInjector();
+        menuComponent.inject(this);
+        mPresenter.setView(this);
 
     }
 
@@ -52,39 +64,7 @@ public class MenuListFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.menu_list_fragment, container, false);
         unbinder = ButterKnife.bind(this, rootView);
-
-        mRecyclerView.setHasFixedSize(true);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        mRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity(),LinearLayoutManager.VERTICAL));
-        // MOCK DATA
-        List<FoodPlate> food = new ArrayList<>();
-        food.add(new FoodPlate("Bandeja Paisa", 20000));
-        food.add(new FoodPlate("Sancocho de Gallina", 15000));
-        food.add(new FoodPlate("Lomo Hawaiano", 18000));
-        food.add(new FoodPlate("Filete de pollo", 17000));
-        food.add(new FoodPlate("Trucha al ajillo", 15000));
-        //Your RecyclerView.Adapter
-        mAdapter = new PlateListAdapter(getActivity(), food);
-        mAdapter.setOnItemAddedListener(this::sendItemToActivity);
-
-        //This is the code to provide a sectioned list
-        List<SimpleSectionedRecyclerViewAdapter.Section> sections =
-                new ArrayList<>();
-
-        //Sections
-        sections.add(new SimpleSectionedRecyclerViewAdapter.Section(0,"Especialidades"));
-        sections.add(new SimpleSectionedRecyclerViewAdapter.Section(2,"Tipicos"));
-        sections.add(new SimpleSectionedRecyclerViewAdapter.Section(4,"Varios"));
-
-        //Add your adapter to the sectionAdapter
-        SimpleSectionedRecyclerViewAdapter.Section[] dummy = new SimpleSectionedRecyclerViewAdapter.Section[sections.size()];
-        SimpleSectionedRecyclerViewAdapter mSectionedAdapter = new
-                SimpleSectionedRecyclerViewAdapter(getActivity(),R.layout.section,
-                R.id.section_text, mAdapter);
-        mSectionedAdapter.setSections(sections.toArray(dummy));
-
-        //Apply this adapter to the RecyclerView
-        mRecyclerView.setAdapter(mSectionedAdapter);
+        mPresenter.getFoodList();
 
         return rootView;
     }
@@ -105,6 +85,12 @@ public class MenuListFragment extends Fragment {
         // the callback interface. If not, it throws an exception
     }
 
+    private void initializeInjector() {
+        this.menuComponent = DaggerMenuComponent.builder()
+                .menuModule(new MenuModule())
+                .build();
+    }
+
     @Override
     public void onDetach() {
         mCallback = null;
@@ -121,5 +107,41 @@ public class MenuListFragment extends Fragment {
         if(mCallback != null) {
             mCallback.onItemAdd(plate);
         }
+    }
+
+    @Override
+    public void populateAdapter(List<SimpleSectionedRecyclerViewAdapter.Section>sections,
+                                List<FoodPlate> food) {
+        mRecyclerView.setHasFixedSize(true);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity(),
+                LinearLayoutManager.VERTICAL));
+        //Your RecyclerView.Adapter
+        mAdapter = new PlateListAdapter(getActivity(), food);
+        mAdapter.setOnItemAddedListener(this::sendItemToActivity);
+        //Add your adapter to the sectionAdapter
+        SimpleSectionedRecyclerViewAdapter.Section[] data =
+                new SimpleSectionedRecyclerViewAdapter.Section[sections.size()];
+        SimpleSectionedRecyclerViewAdapter mSectionedAdapter = new
+                SimpleSectionedRecyclerViewAdapter(getActivity(),R.layout.section,
+                R.id.section_text, mAdapter);
+        mSectionedAdapter.setSections(sections.toArray(data));
+        //Apply this adapter to the RecyclerView
+        mRecyclerView.setAdapter(mSectionedAdapter);
+    }
+
+    @Override
+    public void showSpinner() {
+
+    }
+
+    @Override
+    public void hideSpinner() {
+
+    }
+
+    @Override
+    public void showError(Throwable e) {
+
     }
 }
