@@ -9,10 +9,8 @@ import android.widget.Button;
 import android.widget.NumberPicker;
 import android.widget.TextView;
 
-import com.dafelo.co.casona.BO.FoodPlate;
 import com.dafelo.co.casona.BO.OrderItem;
 import com.dafelo.co.casona.R;
-import com.dafelo.co.casona.listeners.OnItemAddedListener;
 import com.dafelo.co.casona.listeners.OnItemRemovedListener;
 import com.dafelo.co.casona.listeners.OnNumberPickListener;
 

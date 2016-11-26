@@ -2,9 +2,10 @@ package com.dafelo.co.casona.order_detail;
 
 import android.util.Log;
 
-import com.dafelo.co.casona.BO.FoodPlate;
 import com.dafelo.co.casona.BO.Order;
 import com.dafelo.co.casona.BO.OrderItem;
+import com.dafelo.co.casona.order_detail.data.entity.Food;
+
 import rx.Observable;
 import rx.schedulers.Schedulers;
 import rx.subjects.BehaviorSubject;
@@ -24,7 +25,7 @@ public class MenuDetailViewModel {
     }
 
 
-    void addOrder(FoodPlate plate) {
+    void addOrder(Food plate) {
         if(order.getOrders().size() > 0) {
             Observable.from(order.getOrders())
                     .subscribeOn(Schedulers.computation())
@@ -51,7 +52,7 @@ public class MenuDetailViewModel {
         }
     }
 
-    void createNewOrderAndNotify(FoodPlate plate) {
+    void createNewOrderAndNotify(Food plate) {
         // item already in list
         OrderItem orderItem = new OrderItem(plate);
         order.getOrders().add(orderItem);
@@ -60,7 +61,7 @@ public class MenuDetailViewModel {
         orderSubject.onNext(order);
     }
 
-    void removeOrder(FoodPlate plate) {
+    void removeOrder(Food plate) {
         try {
             Observable.from(order.getOrders())
                     .filter(orderItem -> orderItem.getPlate().equals(plate))

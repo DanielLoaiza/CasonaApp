@@ -7,7 +7,6 @@ import com.dafelo.co.casona.adapters.SimpleSectionedRecyclerViewAdapter;
 import com.dafelo.co.casona.main.domain.interactors.DefaultSubscriber;
 import com.dafelo.co.casona.main.domain.interactors.UseCase;
 import com.dafelo.co.casona.order_detail.data.entity.Food;
-import com.dafelo.co.casona.order_detail.data.entity.Section;
 import com.dafelo.co.casona.order_detail.data.entity.Sections;
 import com.dafelo.co.casona.order_detail.interfaces.MenuListContract;
 import java.util.List;
@@ -42,7 +41,7 @@ public class MenuListPresenter implements MenuListContract.Presenter {
 
     @Override
     public void setView(MenuListContract.View view) {
-
+        mMenuView = view;
     }
 
     @Override
@@ -61,7 +60,26 @@ public class MenuListPresenter implements MenuListContract.Presenter {
         }
 
         @Override public void onNext(Sections sections) {
-           Log.e("data", "data");
+            final int[] nextStart = {0};
+            // transform the data for sectioned adapter, getting the first item for each section
+           Observable<List<SimpleSectionedRecyclerViewAdapter.Section>> simpleSections = Observable.from(sections.getSections())
+                   .map(section -> {
+                       SimpleSectionedRecyclerViewAdapter.Section simpleSection
+                               = new SimpleSectionedRecyclerViewAdapter.Section(nextStart[0], section.getName());
+                       nextStart[0] += section.getPlates().size();
+                       return simpleSection;
+           }).toList();
+
+            // get the plates from sections and turns it into a single List
+            // this is necessary for show correctly the info into de sectioned adapter
+            Observable<List<Food>> food = Observable.from(sections.getSections())
+                    .concatMap(section -> Observable.from(section.getPlates()))
+                    .toList();
+
+            Observable.zip(simpleSections, food, (sections1, foods) -> {
+                mMenuView.populateAdapter(sections1, foods);
+                return null;
+            }).subscribe();
         }
     }
 }

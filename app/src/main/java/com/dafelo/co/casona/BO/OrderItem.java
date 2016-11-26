@@ -1,14 +1,16 @@
 package com.dafelo.co.casona.BO;
 
+import com.dafelo.co.casona.order_detail.data.entity.Food;
+
 /**
  * Created by root on 19/11/16.
  */
 
 public class OrderItem {
     private int quantity;
-    private FoodPlate plate;
+    private Food plate;
 
-    public OrderItem(FoodPlate foodPlate) {
+    public OrderItem(Food foodPlate) {
         this.quantity = 1;
         this.plate = foodPlate;
     }
@@ -21,11 +23,11 @@ public class OrderItem {
         this.quantity = quantity;
     }
 
-    public FoodPlate getPlate() {
+    public Food getPlate() {
         return plate;
     }
 
-    public void setPlate(FoodPlate plate) {
+    public void setPlate(Food plate) {
         this.plate = plate;
     }
 

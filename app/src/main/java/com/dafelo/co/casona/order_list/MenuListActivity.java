@@ -1,21 +1,19 @@
 package com.dafelo.co.casona.order_list;
 
-import android.app.FragmentManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
 
 
-import com.dafelo.co.casona.BO.FoodPlate;
 import com.dafelo.co.casona.R;
 import com.dafelo.co.casona.internal.di.HasComponent;
 import com.dafelo.co.casona.listeners.OnItemAddedListener;
 import com.dafelo.co.casona.main.BaseActivity;
 import com.dafelo.co.casona.order_detail.MenuDetailFragment;
 import com.dafelo.co.casona.order_detail.MenuListFragment;
+import com.dafelo.co.casona.order_detail.data.entity.Food;
 import com.dafelo.co.casona.order_detail.di.DaggerMenuComponent;
 import com.dafelo.co.casona.order_detail.di.MenuComponent;
 import com.dafelo.co.casona.order_detail.di.MenuModule;
@@ -87,7 +85,7 @@ public class MenuListActivity extends BaseActivity implements OnItemAddedListene
     }
 
     @Override
-    public void onItemAdd(FoodPlate plate) {
+    public void onItemAdd(Food plate) {
         if (menuDetailFragment != null) {
             menuDetailFragment.addFoodToOrder(plate);
         }

@@ -6,12 +6,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import com.dafelo.co.casona.BO.FoodPlate;
+
 import com.dafelo.co.casona.R;
 import com.dafelo.co.casona.listeners.OnItemAddedListener;
+import com.dafelo.co.casona.order_detail.data.entity.Food;
 
 import java.util.List;
 import butterknife.BindView;
@@ -20,16 +20,16 @@ import butterknife.ButterKnife;
 public class PlateListAdapter extends RecyclerView.Adapter<PlateListAdapter.ViewHolder> {
 
     private final Context mContext;
-    private List<FoodPlate> mData;
+    private List<Food> mData;
     private OnItemAddedListener onItemAddedListener;
 
-    public void add(FoodPlate s,int position) {
+    public void add(Food s,int position) {
         position = position == -1 ? getItemCount()  : position;
         mData.add(position,s);
         notifyItemInserted(position);
     }
 
-    public void itemChanged(FoodPlate s) {
+    public void itemChanged(Food s) {
         int position = mData.indexOf(s);
         Log.e("indexOf", String.valueOf(position));
         if(position > -1) {
@@ -44,7 +44,7 @@ public class PlateListAdapter extends RecyclerView.Adapter<PlateListAdapter.View
         }
     }
 
-    public PlateListAdapter(Context context, List<FoodPlate> data) {
+    public PlateListAdapter(Context context, List<Food> data) {
         mContext = context;
         this.mData = data;
     }

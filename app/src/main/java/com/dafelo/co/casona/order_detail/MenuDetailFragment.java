@@ -6,21 +6,15 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.dafelo.co.casona.BO.FoodPlate;
-import com.dafelo.co.casona.BO.OrderItem;
 import com.dafelo.co.casona.R;
 import com.dafelo.co.casona.adapters.DinningOrderAdapter;
-import com.dafelo.co.casona.adapters.PlateListAdapter;
 import com.dafelo.co.casona.listeners.OnItemAddedListener;
-import com.dafelo.co.casona.listeners.OnNumberPickListener;
-
-import java.util.ArrayList;
+import com.dafelo.co.casona.order_detail.data.entity.Food;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -97,7 +91,7 @@ public class MenuDetailFragment extends Fragment {
         return rootView;
     }
 
-    public void addFoodToOrder(FoodPlate foodPlate) {
+    public void addFoodToOrder(Food foodPlate) {
         menuDetailViewModel.addOrder(foodPlate);
     }
 
