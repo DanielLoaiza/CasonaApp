@@ -1,4 +1,4 @@
-package com.dafelo.co.casona.main.domain.schedulers.threads;
+package com.dafelo.co.casona.main.domain.threads;
 
 
 import com.dafelo.co.casona.main.domain.schedulers.ObserveOn;

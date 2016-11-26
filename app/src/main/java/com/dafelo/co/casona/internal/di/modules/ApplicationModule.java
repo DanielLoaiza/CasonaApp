@@ -4,8 +4,8 @@ import android.content.Context;
 
 
 import com.dafelo.co.casona.Casona;
-import com.dafelo.co.casona.main.domain.schedulers.threads.NewThread;
-import com.dafelo.co.casona.main.domain.schedulers.threads.UIThread;
+import com.dafelo.co.casona.main.domain.threads.NewThread;
+import com.dafelo.co.casona.main.domain.threads.UIThread;
 import com.dafelo.co.casona.main.domain.schedulers.ObserveOn;
 import com.dafelo.co.casona.main.domain.schedulers.SubscribeOn;
 

@@ -15,6 +15,8 @@ import com.dafelo.co.casona.adapters.PlateListAdapter;
 import com.dafelo.co.casona.adapters.SimpleSectionedRecyclerViewAdapter;
 import com.dafelo.co.casona.helpers.DividerItemDecoration;
 import com.dafelo.co.casona.listeners.OnItemAddedListener;
+import com.dafelo.co.casona.main.BaseActivity;
+import com.dafelo.co.casona.main.BaseFragment;
 import com.dafelo.co.casona.order_detail.di.DaggerMenuComponent;
 import com.dafelo.co.casona.order_detail.di.MenuComponent;
 import com.dafelo.co.casona.order_detail.di.MenuModule;
@@ -33,7 +35,7 @@ import butterknife.Unbinder;
  * Created by root on 19/11/16.
  */
 
-public class MenuListFragment extends Fragment implements MenuListContract.View {
+public class MenuListFragment extends BaseFragment implements MenuListContract.View {
 
     @BindView(R.id.menu_list) RecyclerView mRecyclerView;
     private Unbinder unbinder;
@@ -41,7 +43,7 @@ public class MenuListFragment extends Fragment implements MenuListContract.View 
     private PlateListAdapter mAdapter;
     @Inject
     MenuListContract.Presenter mPresenter;
-    private MenuComponent menuComponent;
+
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -53,9 +55,9 @@ public class MenuListFragment extends Fragment implements MenuListContract.View 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.initializeInjector();
-        menuComponent.inject(this);
+        this.getComponent(MenuComponent.class).inject(this);
         mPresenter.setView(this);
+
 
     }
 
@@ -83,12 +85,6 @@ public class MenuListFragment extends Fragment implements MenuListContract.View 
         }
         // This makes sure that the container activity has implemented
         // the callback interface. If not, it throws an exception
-    }
-
-    private void initializeInjector() {
-        this.menuComponent = DaggerMenuComponent.builder()
-                .menuModule(new MenuModule())
-                .build();
     }
 
     @Override
