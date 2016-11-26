@@ -6,6 +6,7 @@ import com.dafelo.co.casona.internal.di.modules.ApplicationModule;
 import com.dafelo.co.casona.main.BaseActivity;
 import com.dafelo.co.casona.main.domain.schedulers.ObserveOn;
 import com.dafelo.co.casona.main.domain.schedulers.SubscribeOn;
+import com.dafelo.co.casona.order_detail.domain.usecase.MenuRepository;
 
 import javax.inject.Singleton;
 import dagger.Component;
@@ -22,4 +23,5 @@ import dagger.Component;
         Context context();
         ObserveOn observeOn();
         SubscribeOn subscribeOn();
+        MenuRepository menuRepository();
 }

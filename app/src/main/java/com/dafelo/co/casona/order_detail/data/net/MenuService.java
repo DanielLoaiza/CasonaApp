@@ -11,6 +11,6 @@ import rx.Observable;
 
 public interface MenuService {
 
-    @GET("api/food")
+    @GET("food")
     Observable<Sections> getFoodList();
 }

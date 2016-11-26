@@ -17,7 +17,6 @@ import com.dafelo.co.casona.helpers.DividerItemDecoration;
 import com.dafelo.co.casona.listeners.OnItemAddedListener;
 import com.dafelo.co.casona.main.BaseActivity;
 import com.dafelo.co.casona.main.BaseFragment;
-import com.dafelo.co.casona.order_detail.di.DaggerMenuComponent;
 import com.dafelo.co.casona.order_detail.di.MenuComponent;
 import com.dafelo.co.casona.order_detail.di.MenuModule;
 import com.dafelo.co.casona.order_detail.interfaces.MenuListContract;

@@ -8,6 +8,8 @@ import com.dafelo.co.casona.main.domain.threads.NewThread;
 import com.dafelo.co.casona.main.domain.threads.UIThread;
 import com.dafelo.co.casona.main.domain.schedulers.ObserveOn;
 import com.dafelo.co.casona.main.domain.schedulers.SubscribeOn;
+import com.dafelo.co.casona.order_detail.data.repository.MenuDataRepository;
+import com.dafelo.co.casona.order_detail.domain.usecase.MenuRepository;
 
 import javax.inject.Singleton;
 
@@ -39,6 +41,11 @@ public class ApplicationModule {
     @Singleton
     SubscribeOn provideSubscribeOn(NewThread subscribeOn) {
         return subscribeOn;
+    }
+
+    @Provides @Singleton
+    MenuRepository provideMenuRepository(MenuDataRepository menuDataRepository) {
+        return menuDataRepository;
     }
 
 }

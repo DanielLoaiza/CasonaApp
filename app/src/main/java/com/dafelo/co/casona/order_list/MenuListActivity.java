@@ -70,6 +70,7 @@ public class MenuListActivity extends BaseActivity implements OnItemAddedListene
     private void initializeInjector() {
         this.menuComponent = DaggerMenuComponent.builder()
                 .applicationComponent(getApplicationComponent())
+                .activityModule(getActivityModule())
                 .menuModule(new MenuModule())
                 .build();
     }

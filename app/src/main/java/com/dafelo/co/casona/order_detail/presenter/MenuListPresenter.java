@@ -57,7 +57,7 @@ public class MenuListPresenter implements MenuListContract.Presenter {
         }
 
         @Override public void onError(Throwable e) {
-            mMenuView.showError(e);
+            Log.e("error", e.getMessage());
         }
 
         @Override public void onNext(Sections sections) {
