@@ -91,6 +91,7 @@ public class MenuListFragment extends BaseFragment implements MenuListContract.V
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        mPresenter.unsubscribe();
         unbinder.unbind();
     }
 
@@ -109,7 +110,17 @@ public class MenuListFragment extends BaseFragment implements MenuListContract.V
                 LinearLayoutManager.VERTICAL));
         //Your RecyclerView.Adapter
         mAdapter = new PlateListAdapter(getActivity(), food);
-        mAdapter.setOnItemAddedListener(this::sendItemToActivity);
+        mAdapter.setOnItemAddedListener(new OnItemAddedListener() {
+            @Override
+            public void onItemAdd(Food plate) {
+                sendItemToActivity(plate);
+            }
+
+            @Override
+            public void itemAddFinished() {
+
+            }
+        });
         //Add your adapter to the sectionAdapter
         SimpleSectionedRecyclerViewAdapter.Section[] data =
                 new SimpleSectionedRecyclerViewAdapter.Section[sections.size()];

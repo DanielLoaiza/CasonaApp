@@ -2,11 +2,15 @@ package com.dafelo.co.casona.order_detail;
 
 import android.util.Log;
 
-import com.dafelo.co.casona.BO.Order;
-import com.dafelo.co.casona.BO.OrderItem;
+import com.dafelo.co.casona.order_detail.data.entity.Order;
+import com.dafelo.co.casona.order_detail.data.entity.OrderItem;
 import com.dafelo.co.casona.order_detail.data.entity.Food;
+import com.dafelo.co.casona.order_detail.domain.usecase.OrderRepository;
+
+import javax.inject.Inject;
 
 import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import rx.subjects.BehaviorSubject;
 
@@ -17,11 +21,24 @@ import rx.subjects.BehaviorSubject;
 public class MenuDetailViewModel {
 
     private BehaviorSubject<Order> orderSubject;
+    private BehaviorSubject<Boolean> isOrderSave = BehaviorSubject.create(false);
+    private OrderRepository orderRepository;
     private Order order;
 
-     MenuDetailViewModel() {
+    @Inject
+     MenuDetailViewModel(OrderRepository orderRepository) {
+        this.orderRepository = orderRepository;
         order = new Order();
         orderSubject = BehaviorSubject.create(order);
+    }
+
+    void saveOrder() {
+        orderRepository.saveOrder(order)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.newThread())
+                .subscribe( order1 -> {
+                    isOrderSave.onNext(true);
+                });
     }
 
 
@@ -31,9 +48,7 @@ public class MenuDetailViewModel {
                     .subscribeOn(Schedulers.computation())
                     .filter(orderItem1 -> orderItem1.getPlate().equals(plate))
                     .map(order.getOrders()::indexOf)
-                    .doOnError(throwable -> {
-                        Log.e("error", throwable.getStackTrace().toString());
-                    })
+                    .doOnError(throwable -> Log.e("error", throwable.getStackTrace().toString()))
                     .toList()
                     .subscribe(list -> {
                         if(list.size() > 0) {
@@ -105,5 +120,10 @@ public class MenuDetailViewModel {
     Observable<Order> ordersObservable()
     {
         return orderSubject.asObservable();
+    }
+
+    public Observable<Boolean> isOrderSaveObservable()
+    {
+        return isOrderSave.asObservable();
     }
 }

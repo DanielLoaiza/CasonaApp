@@ -9,7 +9,9 @@ import com.dafelo.co.casona.main.domain.threads.UIThread;
 import com.dafelo.co.casona.main.domain.schedulers.ObserveOn;
 import com.dafelo.co.casona.main.domain.schedulers.SubscribeOn;
 import com.dafelo.co.casona.order_detail.data.repository.MenuDataRepository;
+import com.dafelo.co.casona.order_detail.data.repository.OrderDataRepository;
 import com.dafelo.co.casona.order_detail.domain.usecase.MenuRepository;
+import com.dafelo.co.casona.order_detail.domain.usecase.OrderRepository;
 
 import javax.inject.Singleton;
 
@@ -46,6 +48,11 @@ public class ApplicationModule {
     @Provides @Singleton
     MenuRepository provideMenuRepository(MenuDataRepository menuDataRepository) {
         return menuDataRepository;
+    }
+
+    @Provides @Singleton
+    OrderRepository provideOrderRepository(OrderDataRepository orderDataRepository) {
+        return orderDataRepository;
     }
 
 }

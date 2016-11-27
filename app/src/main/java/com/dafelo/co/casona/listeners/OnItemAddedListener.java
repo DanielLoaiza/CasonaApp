@@ -8,4 +8,5 @@ import com.dafelo.co.casona.order_detail.data.entity.Food;
 
 public interface OnItemAddedListener {
     void onItemAdd(Food plate);
+    void itemAddFinished();
 }

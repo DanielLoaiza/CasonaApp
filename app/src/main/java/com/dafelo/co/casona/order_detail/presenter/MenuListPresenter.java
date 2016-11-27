@@ -46,7 +46,7 @@ public class MenuListPresenter implements MenuListContract.Presenter {
 
     @Override
     public void unsubscribe() {
-
+        this.getFoodListUserCase.unsubscribe();
     }
 
     private final class FoodListSubscriber extends DefaultSubscriber<Sections> {
@@ -62,10 +62,12 @@ public class MenuListPresenter implements MenuListContract.Presenter {
         @Override public void onNext(Sections sections) {
             final int[] nextStart = {0};
             // transform the data for sectioned adapter, getting the first item for each section
-           Observable<List<SimpleSectionedRecyclerViewAdapter.Section>> simpleSections = Observable.from(sections.getSections())
+           Observable<List<SimpleSectionedRecyclerViewAdapter.Section>> simpleSections =
+                   Observable.from(sections.getSections())
                    .map(section -> {
                        SimpleSectionedRecyclerViewAdapter.Section simpleSection
-                               = new SimpleSectionedRecyclerViewAdapter.Section(nextStart[0], section.getName());
+                               = new SimpleSectionedRecyclerViewAdapter.Section
+                               (nextStart[0], section.getName());
                        nextStart[0] += section.getPlates().size();
                        return simpleSection;
            }).toList();

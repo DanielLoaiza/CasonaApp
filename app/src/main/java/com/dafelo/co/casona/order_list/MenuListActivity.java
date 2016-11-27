@@ -1,5 +1,6 @@
 package com.dafelo.co.casona.order_list;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
@@ -11,6 +12,7 @@ import com.dafelo.co.casona.R;
 import com.dafelo.co.casona.internal.di.HasComponent;
 import com.dafelo.co.casona.listeners.OnItemAddedListener;
 import com.dafelo.co.casona.main.BaseActivity;
+import com.dafelo.co.casona.main.Restaurant;
 import com.dafelo.co.casona.order_detail.MenuDetailFragment;
 import com.dafelo.co.casona.order_detail.MenuListFragment;
 import com.dafelo.co.casona.order_detail.data.entity.Food;
@@ -28,7 +30,8 @@ import butterknife.ButterKnife;
  * item details. On tablets, the activity presents the list of items and
  * item details side-by-side using two vertical panes.
  */
-public class MenuListActivity extends BaseActivity implements OnItemAddedListener, HasComponent<MenuComponent> {
+public class MenuListActivity extends BaseActivity implements OnItemAddedListener,
+        HasComponent<MenuComponent> {
 
     @BindView(R.id.toolbar) Toolbar toolbar;
     @Nullable @BindView(R.id.menu_item_list_container)
@@ -89,6 +92,12 @@ public class MenuListActivity extends BaseActivity implements OnItemAddedListene
         if (menuDetailFragment != null) {
             menuDetailFragment.addFoodToOrder(plate);
         }
+    }
+
+    @Override
+    public void itemAddFinished() {
+        Intent intent = new Intent(this, Restaurant.class);
+        startActivity(intent);
     }
 
     @Override

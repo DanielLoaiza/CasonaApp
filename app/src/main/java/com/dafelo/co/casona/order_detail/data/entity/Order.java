@@ -1,4 +1,7 @@
-package com.dafelo.co.casona.BO;
+package com.dafelo.co.casona.order_detail.data.entity;
+
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,8 +11,15 @@ import java.util.List;
  */
 
 public class Order {
+    @SerializedName("total")
+    @Expose
     private int total;
+    @SerializedName("orders")
+    @Expose
     private List<OrderItem> orders;
+    @SerializedName("waitressName")
+    @Expose
+    private String waitressName;
 
     public Order() {
         this.total = 0;
@@ -26,6 +36,15 @@ public class Order {
 
     public List<OrderItem> getOrders() {
         return orders;
+    }
+
+    // this must change when the login is implemented
+    public String getWaitressName() {
+        return waitressName;
+    }
+
+    public void setWaitressName(String waitressName) {
+        this.waitressName = waitressName;
     }
 
     public void setOrders(List<OrderItem> orders) {
